@@ -1,0 +1,462 @@
+SPIRIT QUEST PROJECT SPECS AND REQUIREMENTS
+V2.0
+
+Project Agreement and Statement of Work
+
+THIS PROJECT AGREEMENT AND STATEMENT OF WORK (this "Agreement") is entered 
+into by and between the undersigned Buyer and Service Provider as of the 
+Effective Date.  The Buyer and Service Provider are sometimes referred to 
+collectively herein as the "Parties" and individually as a "Party".  All 
+capitalized terms not defined in this Agreement have the meanings given to such terms in 
+the Terms of Service Agreement ("Terms of Service") available, unless the context 
+requires otherwise.
+
+1 BACKGROUND AND INITIAL OBLIGATIONS
+
+
+1.1 THE BUYER IS
+    Kenrick Mock
+    UAA Professor of Computer Science and Computer Engineering
+    kjmock@alaska.edu
+
+    Jennifer Stone
+    UAA Associate Professor English Department
+    jstone32@alaska.edu
+
+1.2 THE SERVICE PROVIDER IS
+    Forrest Wilcox 
+    Software Developer
+    fwwilcox@alaska.edu
+    
+    Gareth Bosch
+    Software Developer
+    gbosch@alaska.edu
+
+1.3 THE PROJECT IS
+    Spirit Quest is a web application that allows students to learn about UAA
+    and UAA Resources by completing quests and earning badges.
+    
+    1.3.1 Project Description
+
+    The front end of the application is a web game built on PHP and JavaScript. It is 
+played by students in a web browser. The tasks and challenges it presents to students 
+encourage them to explore UAA campus and learn about resources available to them. The 
+game exists in a partially finished state. The goal of the project is to bring the game 
+closer to a deployable state. To do this we (the service providers) will create an admin 
+Quest entry form to help game writers input stories into the game's MySQL database. We 
+will use this tool to input a number of Questlines waiting to be entered. An architecture 
+for inputting inter-Questline narrative transitions will be implemented. Finally, a 
+prototype application for a mobile version of Spirit Quest will be designed and 
+implemented and will use GPS coordinates to complete Quests.
+    
+    1.3.2 Key Assumptions
+        a Spirit Quest will only be presented in English. 
+        b It will always run on UAA's Unix servers.
+    
+    1.3.3 Scope of Services
+        a Admin form for add/delete Quests to database
+        b Add and test already written Quests
+        c Narrations and simple graphics animations for finished Quests
+        d One quest implemented in mobile prototype
+        e Mobile version uses GPS
+    
+    1.3.4 Milestones
+        a Front-end form to insert new quests into the backend (for admins)
+        b Storylines/Narrations
+        c Mobile prototype (iPhone and Android)
+    
+    
+    1.4 Legal Information
+    
+        1.4.1 Duration of Service
+              The duration of service from the service providers will be from
+              February 27th, 2017 until April 30th, 2017.
+        
+        1.4.2 Intellectual Property
+              The software and all the data that the software uses will be
+              the intellectual property (IP) of the Buyer (UAA).
+        
+        1.4.3 Licensing Conditions
+              The codebase is built with the MIT License. See Appendix A for
+              the MIT License legal text.
+        
+        1.4.4 Termination Conditions
+              
+
+
+
+Signature of Buyer
+
+
+________________________________________________________
+Kenrick Mock, Professor of Computer Science at UAA
+
+
+
+Signature of Service Providers
+
+
+________________________________________________________
+Gareth Bosch, Software Developer
+
+________________________________________________________
+Forrest Wilcox, Software Developer
+
+
+
+-----------------------------------------------------------------------------
+--------    Software Project Requirements and Specifications    -------------
+-----------------------------------------------------------------------------
+
+-----------------------------
+Table of Contents
+-----------------------------
+
+Introduction ------------------------------------------------------ pg. 4
+
+Requirements and Specifications ----------------------------------- pg. 5
+    #1 - Feature 1: More Quests, Storylines, and Animations ------- pg. 5
+    #2 - Feature 2: Add Quests Web Form --------------------------- pg. 5
+    #3 - Feature 3: ----------------------------------------------- pg. 6
+
+Nonfunctional Requirements ---------------------------------------- pg. 7
+
+Assumptions ------------------------------------------------------- pg. 8
+
+Appendix A - MIT License ------------------------------------------ pg. 8
+
+Appendix B - Database Schema--------------------------------------- pg. 8
+
+Appendix C - Architecture Diagram---------------------------------- pg. 8
+
+Appendix D - Storyline Documentation ------------------------------ pg. 8
+
+Appendix E - Storyline Documentation ------------------------------ pg. 9
+
+Appendix F - Storyline Documentation ------------------------------ pg. 9
+
+Appendix G - Storyline Documentation ------------------------------ pg. 9
+
+
+
+
+-----------------------------
+Introduction
+-----------------------------
+
+Purpose and Product Overview
+    Spirit Quest V2 is a program meant to gamify student learning and success in their 
+initial visits to the University of Alaska Anchorage (UAA) and for students to learn more 
+about UAA. This Software Requirements Specification (SRS) describes three updates to the 
+product. The first (see #1) is to add waiting story content to the game database, and to 
+build story transitions and animations. The second (see #2) is a front-end web form to be 
+used by game writers to update the game database by either deleting or adding Quest 
+content. The third (see #3) is a prototype of a mobile version of Spirit Quest V2.
+
+
+Intended Audience
+    This document is intended for UAA faculty, specifically those working on the greater 
+Spirit Quest product. This faculty includes members of the Computer Science and English 
+departments. 
+        
+    
+Product Scope
+    1) It is a web application with several Questlines that have several Quests for the 
+student to complete. The custom front-end administrative database entry form (admin form) 
+will allow a game writer to enter Quest content for an already existing Questline. This 
+same admin form will also allow them to delete existing Quests. The information submitted 
+to the form will update the appropriate table in the game database and will then become 
+content in the game for users to experience. 
+    
+    2) Inputting approximately 15 Questlines worth of new content into the database. This 
+content already exists in document form. The Questline entry form will be used to enter 
+this content. Testing will be done on the functionality of the new game content.
+    
+    3) A mobile app with at least one questline with several quests, and at least one 
+quest that showcases the mobile GPS system in order to complete a quest by going to that 
+quest's objective location. The mobile app will not access the remote database used by 
+the web game. The mobile app will have a local database that is similar to the web game, 
+but is bundled with the mobile app. The mobile app's quests/questlines (data) will not be 
+able to be changed by a user.
+        
+
+Common Terms
+    UAA - University of Alaska Anchorage
+    app - shorthand for application
+    Questline - a large story structure within the game, made up of Quests
+    Quest - a small story structure that is part of a Questline
+    task(s) - the action(s) a player must perform to complete a Quest
+    admin form – a web form game writers will use to add content 
+    
+
+
+    
+-----------------------------
+Requirements and Specifications
+-----------------------------
+
+-----------------------------
+#1 Add More Quests, Implement Narrations/Storylines, and Add Animations
+-----------------------------
+
+    More quests, storylines, narrations and animations will be added to the app to 
+    enhance the quality and user experience of Spirit Quest.
+
+    1.1 Add More Quests
+
+	1.1.1 Using the admin form implemented in #2, add more Quests and Questlines to 
+          the web app Spirit Quests. 
+
+        1.1.2 Approximately 15 Quests are written and waiting to be implemented in the 
+              game. They are written as documents, so they will be manually input into the
+              admin form.
+
+        1.1.3 Confirm the Quests run properly in the game front end.
+            a Quest content will be represented in the game app
+            b Quest content will be interactive in the game app
+            c Completing tasks in the app will reflect in the user database
+
+    1.2 Questline Narrations
+
+        1.2.1 Detect when a Questline is complete for a user
+            a All required tasks in each Quest are completed
+
+        1.2.2 Finish Questline narrative
+            a When a player finishes a Questline text will display to 
+              conclude that part of the story
+            b Graphics will accompany the text
+
+	1.2.3 Detect when a new Questline is opened for a user
+
+        1.2.4 Start new Questline narrative
+            a When a player starts a Questline text will display to 
+              introduce that part of the story
+            b Graphics will accompany the text
+        
+	1.2.5 Detect end of game
+            a When a player has enough badges, end of game will trigger
+            b End of game narrative will display
+            c End of game graphics will display
+        
+    1.3 Animations
+        1.3.1 Badges will animate when earned
+        1.3.2 Characters will animate when narrating story
+        1.3.3 Transitions will animate during Questline conclusions and 
+              introductions
+    
+
+
+-----------------------------   
+#2 Admin Form for Adding, Deleting, and Editing Quests
+-----------------------------    
+
+    A form where users that have administrator (admin) permissions can enter new quests 
+    into the back-end database that Spirit Quest uses. These new Quests will be able to be 
+    completed by users in the front-end interface of Spirit Quest.
+
+    2.1 Accessing Form
+        2.1.1 Permitted users will access the form on UAA's CSE server
+            a CSCE Faculty
+            b English Faculty
+
+    2.1 Add Quests
+        2.1.1 Primary function to add new Quests to the game database.
+            a It will also allow for deletion existing Quests
+            b It will also allow for editing of existing Quests
+        2.1.2 Will be built in PHP and MySQL.
+        2.1.3 Developed in the Buyer's existing code base on the UAA 
+              development server
+	2.1.4 The game writer starts the form by selecting the Questline the
+          Quests belong to in a selection list
+        2.1.5 Text fields in the form
+            a The number of Quests to be attached to the given Questline
+            b The number of subtasks each task will need to be completed
+            c The task titles
+            d The questions for the student to answer
+            e Options for multiple choice questions
+            f Correct answers
+            g Points awarded for correct answer
+        2.1.6 Radio buttons/check boxes in the form
+            a Is the task required
+            b Is the task allowed to be repeated
+            c Quest type
+
+    2.2 Respect referential integrity of the database
+        2.2.1 A Questline has many Quests
+            a Each submittal of the Add Quests form will be associated
+              with a record in the Questline table
+            b To do this, a user will not be able to submit the form
+              without first selecting the appropriate Quest from a list
+        
+    2.3 Standard security
+        2.3.1 Each text input scrubbed for MySQL injection
+        2.3.1 Each text input scrubbed for HTML entities
+        
+    2.4 User Testing
+        2.4.1 English faculty game writer
+            a Functionality of form
+            b Usability of form
+
+
+
+
+
+-----------------------------   
+#3 Mobile Prototype of Spirit Quest
+-----------------------------
+    
+    A mobile prototype (mobile app) will be made for both the latest version of iOS 
+    (version 9.3.5) and Android (Nougat, version 7.0, API Level 24) using the Xamarin build 
+    chain and tools to build this cross-platform mobile app.
+    
+    The main intent of the mobile prototype is to demonstrate how quests can be 
+    implemented that rely on GPS Coordinates. This method can be used to show the
+    user where things are located on campus. The GPS Coordinates will use the phone 
+    user's current coordinates to match with the quest's coordinates in order for 
+    the user to complete the Quest. Therefore, the user needs to actual go to the 
+    location. For instance, if the quest target location was the UAA Library, the 
+    user would need to go to the UAA Library. The GPS coordinates will be used to 
+    verify that the user is at the library.
+    
+    3.1 Implement One Quest
+
+        3.1.1 Quest to implement is for the user to complete a few questions and
+              also go to a few locations (see 3.1.2)
+            a Library hours
+            b Reserve a library study room
+            c Advisor info
+            d Dates and Deadlines page
+        
+        3.1.2 GPS sensing capability to sense location of user to complete a 
+              quest. When the user is close (within 5% tolerance) of the quest's
+              target location, the user completes the quest.
+            a Library (UAA Consortium) (NAD83 GPS Coords: 12.22, -33.33)
+            b UAA Commons Square/Ground (NAD83 GPS Coords: 12.22, -33.33)
+            c CSE Engineering Building (NAD83 GPS Coords: 12.22, -33.33)
+
+    3.2 Quest Data is Retrieved from the Database
+
+        3.2.1 Quest Data is Retrieved from Database, and then used in the mobile
+              app to populate the Quest details
+            a Quest text and the user's progress is retrieved from the database
+            b Quest progress is saved to the database when the user completes 
+              quests and questlines
+            c User logins to the app with their UAA Credentials (Blackboard)
+            
+        3.2.2 Quest and Badge images will be stored in the mobile app's local 
+              resources (todo reword this a bit: these images will be shipped
+              with the app as a local resource)
+    
+    3.3 Mobile Prototype Look and Feel
+        3.3.1 The mobile prototype's look and feel (design and styling) will be 
+              similar to the existing web app's look and feel
+    
+
+-----------------------------   
+Nonfunctional Requirements
+-----------------------------    
+    
+    User Interface Requirements
+
+        - Web application users need to have a modern browser (IE 11+, Chrome v30+, 
+      Firefox v30+)
+
+        - Mobile application users need to have a modern update to their device Android at 
+      least Nougat (version 7)
+    
+    Performance Requirements
+
+        - Low bandwidth web app to save user data bandwidth usage.
+
+
+    Security Requirements
+
+        The administrative database entry form will use standard security measures including 
+        MySQL and HTML entity scrubbing and data validation to prevent SQL injection attacks or 
+        mistakes.
+
+
+-----------------------------
+Assumptions
+-----------------------------  
+
+    Web application users have at least IE11, Chrome v30+ or Firefox v30+.
+
+    Mobile application users have at least iOS 10 or Android Nougat (v7).
+
+    Spirit Quest only supports English.
+
+    The database is MySQL.
+
+    The web application is built with PHP and Javascript.
+
+    The mobile application is built with Xamarin and Visual Studio 2015.
+    
+-----------------------------
+APPENDIX A - MIT License
+-----------------------------
+
+Copyright 2017 University of Alaska Anchorage, Gareth, and Forrest
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of 
+this software and associated documentation files (the "Software"), to deal in the
+Software without restriction, including without limitation the rights to use, 
+copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+Software, and to permit persons to whom the Software is furnished to do so, 
+subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all 
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR 
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN 
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+
+-----------------------------
+APPENDIX B - Spirit Quest Database Schema
+-----------------------------
+
+https://gitlab.com/wilcoforr/cs470-sprit-quest/raw/master/spirit-quest-database-schema.png
+
+-----------------------------
+APPENDIX C - Spirit Quest Architecture Diagram
+-----------------------------
+
+https://gitlab.com/wilcoforr/cs470-sprit-quest/raw/master/spirit-quest-architecture-
+diagram.png
+
+-----------------------------
+APPENDIX D - Spirit Quest Storyline and Narration Documentation
+-----------------------------
+
+https://drive.google.com/open?id=0B9fXPKCRm9qEN1FpZTRQYURSTzg
+
+
+
+
+-----------------------------
+APPENDIX E - Spirit Quest Mobile and Web App Story Flow Example
+-----------------------------
+
+https://gitlab.com/wilcoforr/cs470-sprit-quest/raw/master/spirit-quest-intro-
+narrative.png
+
+-----------------------------
+APPENDIX F - Spirit Quest Quest In-Progress Example
+-----------------------------
+
+https://gitlab.com/wilcoforr/cs470-sprit-quest/raw/master/spirit-quest-in-progress-quest-
+example.png
+
+-----------------------------
+APPENDIX G - Spirit Quest Admin Form Example
+-----------------------------
+
+https://gitlab.com/wilcoforr/cs470-sprit-quest/raw/master/spirit-quest-admin-form.png
+
+1
+
