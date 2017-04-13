@@ -1,7 +1,7 @@
 <!--
 File:       addquests.php
 Author:     Gareth Bosch
-Date:       Spring 2017
+Date:       Fall 2016
 Supervisor: Dr. Kenrick Mock
 Function:   Admin form for viewing, inserting, and 
                 deleting records from the Questline table
@@ -23,19 +23,26 @@ include("includes.inc");
         body {font-family: Courier New; font-size: 12px;}
         div {background-color: #005a31; padding: 3px; 
              border-style: hidden; border-radius: 8px;}
-        table, th, td {padding: 2px;}
-        table#t1, th#r1 {width: 35%; background-color: #f1f1c1; border: 4px solid #005a31; border-collapse: collapse;}
+        table#t1, th#r1 {text-align: right;}
+/*            width: 35%; background-color: #f1f1c1; text-align: right;
+            border: 4px solid #005a31; border-collapse: collapse;
+            padding: 2px;}*/
+/*        table#t2, th, td { 
+            width: fit-content; vertical-align: top; text-align: left;}*/
     </style>
     <title>Add Quests</title>
 </head>
 <body>
     <div>
- <h1>Add Quests</h1></div>
-    <h2><table id="t1"><tr id="r1"><th>Write a Quest for a Questline</th></table></h2>
-    
+        <h1>Add Quests</h1>
+    </div>
+        <br>
+        <h2><table><tr><th>Write a Quest for a Questline</th></tr></table></h2>
+        <br>
     <?php checkForInput(); ?>
     
-  <form method="post" action=<?php getServer() ?>><pre>     
+<form method="post" action="<?php getServer() ?>">   
+    <pre>
     Which Questline is this Quest for?          <select name="questline">
                                         <?php $j=0; 
                                          foreach(getQuestlineTitles() as $item)
@@ -44,71 +51,92 @@ include("includes.inc");
 
     How many tasks will be in this Quest?       <input type="number" min="1" max="99" value="1"  name="taskcount">
 
+    Progressive                                 <input type="number" min="0" max="99" value="0"  name="progressive">
+
+<!--    If there are multiple tasks, do they have to be completed in order?   
+                            Yes <input type="radio" name="progressive" value="1">
+                            No  <input type="radio" name="progressive" value="2" checked>-->
     How many times can this Quest be repeated?  <input type="number" min="0" max="99" value="0"  name="repeats">
       </pre>
-   <fieldset><legend><b><pre>Task 1</pre></b></legend>
-    <table style="width: 75%">
-        <tr>
-          <td> Title:          <input type="text" size="30"  name="task1"></td>
-          <td> Question Type:    Short Answer<input type="radio" name="questiontype" value="2">
+      <fieldset><legend><pre><b>Task 1</b></pre></legend>
+    <pre>
+    <table id="t2">
+        <tr><td> Title:          <input type="text" size="30"  name="task1" value="ANOTHER test title" required></td>
+          <td> Question Type:      Short Answer<input type="radio" name="questiontype" value="2" checked>
                   Multiple Choice<input type="radio" name="questiontype" value="1">
                   Simple Completion<input type="radio" name="questiontype" value="3">
-          </td>
-        </tr>
-    </table><pre>
- Are students required to complete it?      Yes  <input type="radio" name="required" value="1" checked>  
+          </td></tr>
+    </table>
+ Are students required to complete it?      Yes  <input type="radio" name="required" value="1">  
                                             No   <input type="radio" name="required" value="0" checked>
 
  Question or Student Goal:
-                 <textarea name="evidence" cols="80" rows="2" wrap="hard" required></textarea>   
+                 <textarea name="evidence" cols="80" rows="2" wrap="hard" required>a test question again</textarea>
 
- Answer:
-                 <textarea name="answer" cols="80" rows="2" wrap="hard" required></textarea>
+ Answer options, if multiple choice (separated by commas)
+                 <input type="text" size="80"  name="options" value=" ">
+
+ Correct Answer:        <!-- empty string is default value for some fields because they aren't 
+                            required in the database, and if the user leaves 
+                            them blank, the variable must still have a value when inserted into the table -->
+                 <textarea name="answer" cols="80" rows="2" wrap="hard" >a test answer too</textarea>
 
  How many points are awarded for completion? <input type="number" min="1" max="99" value="1"  name="points" required>
                  </pre>
    </fieldset>
         <br>
-        <pre><input type="submit" value="Submit Quest"></form>      <!--<button type="button">Clear Form</button></pre>-->
+        <input type="submit" value="Submit Quest">  <!--<button type="button">Clear Form</button>-->
+</form>  
         <br>
         <pre>
 <?php
+
 echo     '     <b>Record Entered</b><br>'.         
          '       Questline:      '.$questline.'<br>'.
-         '       Task Count:     '.$taskcount.'<br>'.
-         '       Repeats:        '.$repeats.'<br>'.
+         '       Task Count(ID): '.$taskcount.'<br>'.
          '       Task:           '.$task1.'<br>'.
-         '       Question type:  '.$questiontype.'<br>'.
-         '       Required:       '.$required.'<br>'.
          '       Evidence:       '.$evidence.'<br>'.
-         '       Answer:         '.$answer. '<br>'.
-         '       Points:         '.$points;
-?>
+         '       Progressive:    '.$progressive.'<br>'.
+         '       Points:         '.$points.'<br>'.
+         '       Required:       '.$required.'<br>'.
+         '       Repeats:        '.$repeats.'<br>'.
+         '       Question type:  '.$questiontype.'<br>'.
+         '       Answer Options: '.$options.'<br>'.
+         '       Correct Answer: '.$answer. '<br>';
 
+?>
         </pre>
-<?php insertIntoTable(); ?>
+    <?php insertIntoTable(); ?>
 </body>
 </html>
 
 <?php            
              
- function cleanHTML($var){
-     stripslashes($var);
-     strip_tags($var);
-     htmlentities($var);
-     return $var;
+ function cleanHTML($arrRef){
+     $fieldVal = $_POST[$arrRef];
+     $stripped = stripslashes($fieldVal);
+     $cleaned = strip_tags($stripped);
+     return htmlentities($cleaned);
+
  }
 
- function cleanMySQL($var){
-     mysql_real_escape_string($var);
-     cleanHTML($var);
-     return $var;
+ function cleanMySQL($valueForDB){
+     return mysql_real_escape_string($valueForDB);
  }
  
  function getServer(){
      return $_SERVER['PHP_SELF'];
  }
+  
+ // The empty string is used as default value for some fields because they 
+ //     aren't required in the database and if the user leaves them blank, 
+ //     the variable must still have a value when inserted into the table.
+ function emptyString(){
+     return "";
+ }
  
+ // Returns an integer that is the primary key for the given
+ //     Questline title
  function getOneQuestlineID($q) {
      $query = "SELECT questlineid FROM questlines WHERE title = '$q'";
      $result = mysql_query($query);
@@ -119,8 +147,9 @@ echo     '     <b>Record Entered</b><br>'.
      return $row[0];
  }
 
+ // Returns an int array containing unique questlineids that are foriegn 
+ //     keys in the Quests table
  function getQuestlineIDs(){
-     // Returns an array containing only unique questlineids
      $result = mysql_query("SELECT questlineid FROM quests");
      if(!$result) {die(mysql_error());}
      $rows = mysql_num_rows($result);
@@ -135,6 +164,7 @@ echo     '     <b>Record Entered</b><br>'.
      return $normalizedList;
  }
 
+ // Returns a string array of all Questline titles
  function getQuestlineTitles(){
      $result = mysql_query("SELECT title FROM questlines");
      if(!$result) {die(mysql_error());}
@@ -147,58 +177,77 @@ echo     '     <b>Record Entered</b><br>'.
      return $questlineNames;
  }
  
+ // Has data from the form fields been submitted to the server via POST?
+ // Returns true if yes
+ function fieldsAreSubmitted(){
+     return 
+       ( isset($_POST['questline'])); 
+//             $_POST['taskcount'],
+//            $_POST['task1'], $_POST['evidence'], $_POST['progressive'], 
+//            $_POST['points'], $_POST['required'],$_POST['repeats'], 
+//            $_POST['questiontype'],$_POST['options'], $_POST['answer']) );
+ }
+ 
+ // Check the form for input, collect it into variables if it's been posted
+ // If not posted, set variables to [Not entered] for display
  function checkForInput(){
-     // Check the form for input, collect it if it's there
-     if (isset($_POST['questline'])    && isset($_POST['taskcount'])    &&
-         isset($_POST['repeats'])      && isset($_POST['task1'])        &&
-         isset($_POST['questiontype']) && isset($_POST['required'])     &&
-         isset($_POST['evidence'])     && isset($_POST['answer'])       &&
-         isset($_POST['points'])) {
-         global $questline; $questline        = cleanHTML($questline);
-         global $taskcount; $taskcount        = cleanHTML($taskcount);
-         global $repeats; $repeats            = cleanHTML($repeats);
-         global $task1; $task1                = cleanHTML($task1);
-         global $questiontype; $questiontype  = cleanHTML($questiontype);
-         global $required; $required          = cleanHTML($required);
-         global $evidence; $evidence          = cleanHTML($evidence);
-         global $answer; $answer              = cleanHTML($answer);
-         global $points; $points              = cleanHTML($points); }
+     if ( fieldsAreSubmitted() ) {
+         global $questline; $questline        = cleanHTML("questline");
+         global $taskcount; $taskcount        = cleanHTML("taskcount");
+         global $task1; $task1                = cleanHTML("task1");
+         global $evidence; $evidence          = cleanHTML("evidence");
+         global $progressive; $progressive    = cleanHTML("progressive");
+         global $points; $points              = cleanHTML("points");
+         global $required; $required          = cleanHTML("required");
+         global $repeats; $repeats            = cleanHTML("repeats");
+         global $questiontype; $questiontype  = cleanHTML("questiontype");
+         global $options; $options            = cleanHTML("options");
+         global $answer; $answer              = cleanHTML("answer"); 
+         echo "DATA POSTED!!!";
+     }
      else {
          global $questline; $questline        = "[Not entered]";
          global $taskcount; $taskcount        = "[Not entered]";
-         global $repeats; $repeats            = "[Not entered]";
          global $task1; $task1                = "[Not entered]";
-         global $questiontype; $questiontype  = "[Not entered]";
-         global $required; $required          = "[Not entered]";
          global $evidence; $evidence          = "[Not entered]";
-         global $answer; $answer              = "[Not entered]";
+         global $progressive; $progressive    = "[Not entered]";
          global $points; $points              = "[Not entered]";
+         global $required; $required          = "[Not entered]";
+         global $repeats; $repeats            = "[Not entered]";
+         global $questiontype; $questiontype  = "[Not entered]";
+         global $options; $options            = "[Not entered]";
+         global $answer; $answer              = "[Not entered]";
+         echo "DATA IS NOT POSTED!!!";
      }
  }
  
+ // Check the form for input
+ // Takes the values submited to the form and inserts them into Quests table
  function insertIntoTable(){
-     // Takes the values submited to the form
-     //    and inserts them into Quests table
-     if (isset($_POST['questline'])    && isset($_POST['taskcount'])    &&
-         isset($_POST['repeats'])      && isset($_POST['task1'])        &&
-         isset($_POST['questiontype']) && isset($_POST['required'])     &&
-         isset($_POST['evidence'])     && isset($_POST['answer'])       &&
-         isset($_POST['points'])) {
-         global $questlineID;
-         global $questline; $questlineID      = getOneQuestlineID($questline);
+     if ( fieldsAreSubmitted() ) {
+         global $questline;
+         global $questlineID; $questlineID    = getOneQuestlineID($questline);
          global $taskcount; $taskcount        = cleanMySQL($taskcount);
-         global $repeats; $repeats            = cleanMySQL($repeats);
          global $task1; $task1                = cleanMySQL($task1);
-         global $questiontype; $questiontype  = cleanMySQL($questiontype);
-         global $required; $required          = cleanMySQL($required);
          global $evidence; $evidence          = cleanMySQL($evidence);
-         global $answer; $answer              = cleanMySQL($answer);
+         global $progressive; $progressive    = cleanMySQL($progressive);
          global $points; $points              = cleanMySQL($points);
+         global $required; $required          = cleanMySQL($required);
+         global $repeats; $repeats            = cleanMySQL($repeats);
+         global $questiontype; $questiontype  = cleanMySQL($questiontype);
+         global $options; $options            = cleanMySQL($options);
+         global $answer; $answer              = cleanMySQL($answer);
+         
+      // -questlineid(int)-, taskid(int), task, -evidence-, progressive(int), 
+      //  -points(int)-, required(int), -repeats(int)-, -questtype(int)-, -options-, -correctanswer-
          $query = "INSERT INTO quests VALUES" .
-            "('$questlineID', '$taskcount', '$repeats', '$task1', '$questiontype',"
-                 . " $required, '$evidence', '$points')";
+            "($questlineID, $taskcount, '$task1', '$evidence', $progressive, "
+          . "$points, $required, $repeats, $questiontype, '$options', '$answer')";
          if(!mysql_query($query)){
-             echo "INSERT failed: $query <br> mysql_error() <br>";}
+             $errorMsg = mysql_error();
+             echo "INSERT failed: $query  --  ERROR MSG: $errorMsg";
+             
+         }
     }
  }
  

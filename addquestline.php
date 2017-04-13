@@ -146,7 +146,7 @@ Function:   Admin form for viewing, inserting, and
  
  // Returns an array of strings containing every 
  //     attribute from the Attribute table.
- // Used to populate attribute selection list in the form.
+ // Used to populate Attribute selection list in the form.
  // Maintains referencial integrity between Attributes
  //     table and Questlines table.
  function getAttributes(){
